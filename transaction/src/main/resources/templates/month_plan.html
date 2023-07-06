@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Month Plan</title>
+        <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </head>
+    <style>
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 10px;
+        }
+        .card .card-content {
+            padding: 3px;
+        }
+        .card-content {
+            font-size: 12px;
+        }
+        .nav-wrapper{
+            padding-left: 20px;
+        }
+        #addmodal button{
+            float: right;
+        }
+        .modal{
+            max-height: 80%;
+        }
+        .card-content .material-icons{
+            font-size: 12px;
+            color: rgba(0,0,0,0.87);
+        }
+
+        
+    </style>
+    <nav>
+        <div class="nav-wrapper blue-grey darken-2">
+            <b class="blue-text text-lighten-4">월별증감 현황</b>
+            <span><a class="blue-text text-lighten-4 waves-effect waves-light modal-trigger" href="#addmodal"><i class="material-icons">add</i></a></span>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/">월계획</a></li>
+            <li><a href="/month-check">월증감</a></li>
+            <li><a href="">자산현황</a></li>
+            </ul>
+        </div>
+    </nav>
+    <body>
+        <div class="container row">
+            <div class="col s3">
+                <div class="card pink lighten-5">
+                    <div class="card-action">
+                        <span class="pink-text text-darken-4">고정지출</span>
+                        <!--<span><a class="blue-grey-text text-darken-3 waves-effect waves-light modal-trigger" href="#addmodal" data-type="2"><i class="material-icons">add</i></a></span>-->
+                    </div>
+                    <div class="card-content">
+                        <table>
+                            <colgroup>
+                                <col>
+                                <col style="width: 40%">
+                                <col>
+                                <col style="width: 10%">
+                                <col style="width: 10%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>일자</th>
+                                    <th>내역</th>
+                                    <th>금액</th>
+                                    <th>수정</th>
+                                    <th>삭제</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="trans : ${trans2}">
+                                    <tr>
+                                        <td th:text="${trans.trans_date}"></td>
+                                        <td th:text="${trans.title}"></td>
+                                        <td th:text="${trans.amt}"></td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#addmodal" th:data-sno="${trans.sno}">
+                                                <i class="material-icons">edit</i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#" th:data-sno="${trans.sno}" onclick="rm_trans(this); return false;">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s5">
+                <div class="card green lighten-5">
+                    <div class="card-action">
+                        <span class="green-text text-darken-4">적금</span>
+                    </div>
+                    <div class="card-content">
+                        <table>
+                            <colgroup>
+                                <col>
+                                <col style="width: 28%">
+                                <col>
+                                <col style="width: 28%">
+                                <col style="width: 10%">
+                                <col style="width: 10%">
+                            </colgroup>
+                            <tr>
+                                <th>일자</th>
+                                <th>내역</th>
+                                <th>금액</th>
+                                <th>비고</th>
+                                <th>수정</th>
+                                <th>삭제</th>
+                            </tr>
+                            <tbody>
+                                <th:block th:each="trans : ${trans3}">
+                                    <tr>
+                                        <td th:text="${trans.trans_date}"></td>
+                                        <td th:text="${trans.title}"></td>
+                                        <td th:text="${trans.amt}"></td>
+                                        <td th:text="${trans.memo}"></td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#addmodal" th:data-sno="${trans.sno}">
+                                                <i class="material-icons">edit</i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#" th:data-sno="${trans.sno}" onclick="rm_trans(this); return false;">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card blue lighten-5">
+                    <div class="card-action">
+                        <span class="blue-text text-darken-4">할부</span>
+                    </div>
+                    <div class="card-content">
+                        <table>
+                            <colgroup>
+                                <col>
+                                <col style="width: 30%">
+                                <col>
+                                <col style="width: 35%">
+                                <col style="width: 10%">
+                                <col style="width: 10%">
+                            </colgroup>
+                            <tr>
+                                <th>일자</th>
+                                <th>내역</th>
+                                <th>금액</th>
+                                <th>비고</th>
+                                <th>수정</th>
+                                <th>삭제</th>
+                            </tr>
+                            <tbody>
+                                <th:block th:each="trans : ${trans4}">
+                                    <tr>
+                                        <td th:text="${trans.trans_date}"></td>
+                                        <td th:text="${trans.title}"></td>
+                                        <td th:text="${trans.amt}"></td>
+                                        <td th:text="${trans.memo}"></td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#addmodal" th:data-sno="${trans.sno}">
+                                                <i class="material-icons">edit</i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#" th:data-sno="${trans.sno}" onclick="rm_trans(this); return false;">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s4">
+                <div class="card yellow lighten-5">
+                    <div class="card-action">
+                        <span class="yellow-text text-darken-4">수입</span>
+                    </div>
+                    <div class="card-content">
+                        <table>
+                            <colgroup>
+                                <col>
+                                <col style="width: 40%">
+                                <col>
+                                <col style="width: 10%">
+                                <col style="width: 10%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>일자</th>
+                                    <th>내역</th>
+                                    <th>금액</th>
+                                    <th>수정</th>
+                                    <th>삭제</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="trans : ${trans0}">
+                                    <tr>
+                                        <td th:text="${trans.trans_date}"></td>
+                                        <td th:text="${trans.title}"></td>
+                                        <td th:text="${trans.amt}"></td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#addmodal" th:data-sno="${trans.sno}">
+                                                <i class="material-icons">edit</i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#" th:data-sno="${trans.sno}" onclick="rm_trans(this); return false;">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card grey lighten-5">
+                    <div class="card-action">
+                        <span class="grey-text text-darken-4">변동사항</span>
+                    </div>
+                    <div class="card-content">
+                        <table>
+                            <colgroup>
+                                <col style="width: 35%">
+                                <col>
+                                <col style="width: 35%">
+                                <col style="width: 10%">
+                                <col style="width: 10%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>등록일</th>
+                                    <th>내역</th>
+                                    <th>비고</th>
+                                    <th>수정</th>
+                                    <th>삭제</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="trans : ${trans1}">
+                                    <tr>
+                                        <td th:text="${trans.reg_date}"></td>
+                                        <td th:text="${trans.title}"></td>
+                                        <td th:text="${trans.memo}"></td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#addmodal" th:data-sno="${trans.sno}">
+                                                <i class="material-icons">edit</i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="waves-effect waves-light modal-trigger" href="#" th:data-sno="${trans.sno}" onclick="rm_trans(this); return false;">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="addmodal" class="modal">
+            <div class="modal-content">
+                <div class="row">
+                    <form class="col s12" action="/add-month-plan" method="post">
+                        <input type="hidden" name="sno" value="0">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <select id="trans_type" name="trans_type">
+                                    <option value="0">수입</option>
+                                    <option value="1">변동사항</option>
+                                    <option value="2">고정지출</option>
+                                    <option value="3">적금</option>
+                                    <option value="4">할부금</option>
+                                </select>
+                                <label  for="trans_type">카테고리</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <select id="trans_date" name="trans_date">
+                                    <th:block th:each="num : ${#numbers.sequence(1,31)}">
+                                        <option th:value="${numStat.current}" th:text="${numStat.current}"></option>
+                                    </th:block>
+                                </select>
+                                <label  for="trans_date">일자</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="title" type="text" class="validate" name="title">
+                                <label for="title">내역</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="amt" type="text" class="validate" name="amt">
+                                <label for="amt">금액</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="memo" type="text" class="validate" name="memo">
+                                <label for="memo">비고</label>
+                            </div>
+                        </div>
+                        <button class="btn-flat waves-effect waves-light teal lighten-5" type="submit" name="action">저장</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </body>
+    <script>
+        $(document).ready(function(){
+            var modal_form = $('#addmodal').find('form');
+            $('.modal').modal({
+                onOpenStart:function(e){
+                    console.log($(modal_form));
+                    console.log(1,e.M_Modal._openingTrigger.attributes[2]);
+                    new Promise(
+                        function(resolve, reject){
+                            if(!e.M_Modal._openingTrigger.attributes[2]){
+                                resolve(false);
+                            }else{
+                                $.ajax({
+                                    url: '/month-plan-item/'+e.M_Modal._openingTrigger.attributes[2].value,
+                                    type: 'GET',
+                                    contentType: false,
+                                    processData: false,
+                                    success: function(d) {
+                                        resolve(d);
+                                    },
+                                    error: function( error) {
+                                        resolve(false);
+                                    }
+                                });
+                            }
+                    }).then((data)=>{
+                        if(data){
+                            console.log('get item suc', data);
+
+                            $(modal_form).find('input[name="sno"]').val(data.sno);
+                            $(modal_form).find('select[name="trans_type"]').val(data.trans_type).change();
+                            $(modal_form).find('select[name="trans_type"]').formSelect();
+                            $(modal_form).find('select[name="trans_date"]').val(data.trans_date).change();
+                            $(modal_form).find('select[name="trans_date"]').formSelect();
+                            $(modal_form).find('input[name="title"]').val(data.title);
+                            $(modal_form).find('input[name="amt"]').val(data.amt);
+                            if(data.memo) $(modal_form).find('input[name="memo"]').val(data.memo);
+                        }else{
+                            console.log('get item fail');
+                        }
+                    });
+
+                    $(modal_form).submit(function(e){
+                        e.preventDefault();
+                        var form = $(modal_form)[0];
+                        var formData = new FormData(form);
+
+                        $.ajax({
+                            url: '/month-plan-item'+(($(modal_form).find('input[name="sno"]').val()==0)?'':'/'+$(modal_form).find('input[name="sno"]').val()),
+                            type: (($(modal_form).find('input[name="sno"]').val()==0)?'POST':'PUT'),
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(d) {
+                                $('.modal').modal('close');
+                                location.reload();
+                            },
+                            error: function( error) {
+                                console.log('submit error', error);
+                            }
+                        });
+                        
+                    })
+                }
+            });
+            $('select').formSelect();
+            
+            rm_trans = function(target){
+                console.log($(target).data('sno'));
+                $.ajax({
+                    url: '/month-plan-item/'+$(target).data('sno'),
+                    type: 'DELETE',
+                    contentType: false,
+                    processData: false,
+                    success: function(d) {
+                        location.reload();
+                    },
+                    error: function( error) {
+                        console.log('delete item fail');
+                    }
+                });
+            }
+
+        
+        
+        });
+    </script>
+</html>
