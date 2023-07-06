@@ -19,6 +19,10 @@ mysql : 8.0.33
 |DELETE|month-plan-item/{sno}|delete_month_plan_item|데이터 삭제|
 <br>
 
+
+## 디렉토리 구조
+<img width="333" alt="스크린샷 2023-07-06 오후 5 43 14" src="https://github.com/cyes7126/190128_OpenProject_Spring/assets/46583544/8b42c8a3-62d5-43e4-b53f-80680acce16a">
+
 ## 실행화면
 1. 리스트화면
 <img width="1385" alt="스크린샷 2023-07-06 오후 5 20 19" src="https://github.com/cyes7126/190128_OpenProject_Spring/assets/46583544/50faec99-c2fe-4650-a083-19e406ad5a15">
