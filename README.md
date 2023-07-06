@@ -22,6 +22,7 @@ mysql : 8.0.33
 
 ## 디렉토리 구조
 <img width="333" alt="스크린샷 2023-07-06 오후 5 43 14" src="https://github.com/cyes7126/190128_OpenProject_Spring/assets/46583544/8b42c8a3-62d5-43e4-b53f-80680acce16a">
+<br>
 
 ## 실행화면
 1. 리스트화면
