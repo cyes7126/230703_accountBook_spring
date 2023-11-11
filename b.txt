@@ -1,1 +1,1 @@
-logger("error")
+logger("error",1)
